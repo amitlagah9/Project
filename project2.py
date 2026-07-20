@@ -1,4 +1,4 @@
-#from turtle import left, right
+from turtle import left, right
 
 import streamlit as st
 import pandas as pd
@@ -203,28 +203,19 @@ if opt=="🏠Home":
     """, unsafe_allow_html=True)
 
     with col2:
-     st.image("image 2.jpeg")
-    st.markdown("""
+     st.image("image 3.jpeg")
+     st.markdown("""
         
         """, unsafe_allow_html=True)
    
-    st.markdown("""
+    st.markdown(""" 
 <p style="font-size:24px; line-height:1.8; color:white;">
-Welcome to the <b>Teen Mental Health & Social Media Usage Dashboard</b>. This interactive dashboard explores how social media habits may influence the mental health and daily lifestyle of teenagers.
-With the help of data visualization and statistical analysis, this project provides meaningful insights into screen time, sleep patterns, physical activity, and other factors related to teen well-being.
+Teen Mental Health & Social Media Usage Dashboard This interactive dashboard explores how social media habits may influence the mental health and daily lifestyle of teenagers.With the help of data visualization and statistical analysis, this project provides meaningful insights into screen time, sleep patterns, physical activity, and other factors related to teen well-being.
+
 <br><br>
 </p>
 """, unsafe_allow_html=True)
 
-#     st.write("""
- 
-
-# ## Welcome!
-
-# Welcome to the **Teen Mental Health & Social Media Usage Dashboard**. This interactive dashboard explores how social media habits may influence the mental health and daily lifestyle of teenagers.
-
-# With the help of data visualization and statistical analysis, this project provides meaningful insights into screen time, sleep patterns, physical activity, and other factors related to teen well-being.
-#      """)
     st.markdown("""
     
     <h1 style="color:white; font-size:45px;">
@@ -273,7 +264,7 @@ With the help of data visualization and statistical analysis, this project provi
     """, unsafe_allow_html=True)
      
      st.divider()
-    st.image("image 1.jpeg",use_column_width=True)
+    # st.image("image 1.jpeg",use_column_width=True)
     st.markdown("""
     <h1 style="color:white; font-size:45px;">
     📊 Dashboard Overview
@@ -314,7 +305,7 @@ With the help of data visualization and statistical analysis, this project provi
      st.markdown(f"""
      
     <div class="metric-card">
-        <div class="metric-title">🧭Easy-to-use navigation</div>
+        <div class="metric-title">🧭Easy-to-use navigation and interface</div>
     <div class={len(df)}</div>
     </div>
     """, unsafe_allow_html=True)
@@ -418,13 +409,6 @@ Use the navigation menu on the left to explore the dataset, visualize trends, di
     </div>
     """, unsafe_allow_html=True)
 
-    # col1.metric("👥 Total Teenagers",len(df))
-    # col2.metric("📱 Avg Social Media Hours",round(df["daily_social_media_hours"].mean(),2))
-    # col3.metric("😴 Avg Sleep Hours",round(df["sleep_hours"].mean(),2))
-    # col4.metric("🏃 Avg Physical Activity",round(df["physical_activity"].mean(),2)) 
-    from streamlit_lottie import st_lottie
-    import requests
-
     url = "https://assets9.lottiefiles.com/packages/lf20_qp1q7mct.json"
 
     animation = requests.get(url).json()
@@ -434,20 +418,10 @@ Use the navigation menu on the left to explore the dataset, visualize trends, di
 elif opt== "Dataset":
     
     
-    set_background("black.png")   
+ 
     st.markdown('<div class="page-subtitle"></div>', unsafe_allow_html=True)
 
-    # st.markdown('<div class="section-heading-sm">📁 Upload Dataset</div>', unsafe_allow_html=True)
-    # uploaded_file = st.file_uploader("Upload Teen Mental Health Dataset(CSV or Excel)", type=["csv", "xlsx"])
-
-    # if uploaded_file:
-    #     new_df = load_data(uploaded_file)
-    #     if new_df is not None:
-    #         st.session_state.df = new_df
-    #         st.success(f"File '{uploaded_file.name}' uploaded successfully — {len(new_df):,} rows loaded.")
-        # else:
-        #     st.error("Could not read that file. Please check the format and try again.")
-
+    
     active_df = st.session_state.df if st.session_state.df is not None else load_data(None)
 
     if active_df is None:
@@ -485,13 +459,12 @@ elif opt== "Dataset":
         default_rows = min(20, slider_max)
         n_rows = st.slider("Rows to preview", min_value=1, max_value=slider_max, value=default_rows)
 
-        tab1, tab2, tab3 = st.tabs(["🔍 Preview", "🧬 Column Info", "🔢 Value Counts"])
+        tab1, tab2 = st.tabs(["🔍 Preview", "🧬 Column Info"])
 
         with tab1:
-            st.dataframe(df.head(n_rows), width="stretch")
-            st.image("image 4.jpeg",use_column_width=True)
+        
 
-        with tab2:
+        
             col_info = pd.DataFrame({
                 "Column": df.columns,
                 "Data Type": df.dtypes.astype(str).values,
@@ -501,7 +474,7 @@ elif opt== "Dataset":
             })
             st.dataframe(col_info, width="stretch", hide_index=True)
 
-        with tab3:
+        with tab2:
             default_col = "Platform" if "Platform" in df.columns else df.columns[0]
             vc_col = st.selectbox("Choose a column", options=df.columns.tolist(),
                                    index=df.columns.tolist().index(default_col))
@@ -565,12 +538,14 @@ elif opt=="📊Visualization":
     </div>
     """, unsafe_allow_html=True)
      
+     st.divider()
+     
      
     # col1.metric("👥 Total Teenagers",len(df))
     # col2.metric("📱 Avg Social Media Hours",round(df["daily_social_media_hours"].mean(),2))
     # col3.metric("😴 Avg Sleep Hours",round(df["sleep_hours"].mean(),2))
     # col4.metric("🏃 Avg Physical Activity",round(df["physical_activity"].mean(),2))
-    t1,t2,t3,t4,t5,t6=st.tabs(["📊Histogram","📈Line chart","📌Scatter Plot", "💡Bar Chart","🧩Pie Chart","Graphs"])
+    t1,t2,t3,t4,t5=st.tabs(["📊Histogram","📈Line chart","💡Bar Chart","🧩Pie Chart","📌Graphs"])
     st.markdown("---")
     
     with t1:
@@ -580,12 +555,24 @@ elif opt=="📊Visualization":
           df,
          x="age",
          nbins=15,
-         color_discrete_sequence=px.colors.sequential.Viridis
+         color_discrete_sequence=px.colors.qualitative.Set1
          )
 
         st.plotly_chart(fig, use_container_width=True)
-        
 
+        st.divider()
+
+        st.subheader("😴 Sleep Hours Distribution")
+
+        fig = px.histogram(
+           df,
+        x="sleep_hours",
+        nbins=12,
+        color_discrete_sequence=["#636EFA"]
+        )
+        fig.update_layout(height=500,width=800,bargroupgap=0.15)
+
+        st.plotly_chart(fig, use_container_width=True)
         
     with t2:
        st.subheader("📉 Average Stress by Age")
@@ -601,24 +588,25 @@ elif opt=="📊Visualization":
         )
 
        st.plotly_chart(fig, use_container_width=True)
-    with t3:
-      
-       st.subheader("📍 Sleep Hours vs Stress Level")
 
-       fig = px.scatter(
-             df,
-             x="sleep_hours",
-             y="stress_level",
-             color="gender",
-             hover_data=["age", "platform_usage"],
-             template="plotly_white",
-             color_discrete_sequence=px.colors.qualitative.Bold,
-             title="Sleep Hours vs Stress Level"
-             )
+       st.divider()
+
+       st.subheader("📈 Average Sleep Hours by Age")
+
+       avg_sleep = df.groupby("age")["sleep_hours"].mean().reset_index()
+
+       fig = px.line(
+        avg_sleep,
+        x="age",
+        y="sleep_hours",
+        markers=True,
+        color_discrete_sequence=["#EF553B"]
+        )
 
        st.plotly_chart(fig, use_container_width=True)
     
-    with t4:
+    
+    with t3:
     #   st.subheader("Gender Distribution
         st.subheader("📈 Gender Distribution")
 
@@ -633,18 +621,24 @@ elif opt=="📊Visualization":
              color_discrete_sequence=px.colors.qualitative.Set2
              )
 
+        fig.update_layout(bargroupgap=0.50)
+
         st.plotly_chart(fig, use_container_width=True)
       
+        st.divider()
+
         st.subheader("Charts")
         st.subheader("Stress Level Distribution ")
         fig,ax=plt.subplots()
-        df["stress_level"].value_counts().plot(kind="bar",ax=ax)
+        color_discrete_sequence=px.colors.qualitative.T10
 
+        df["stress_level"].value_counts().plot(kind="bar",ax=ax)
+        
         ax.set_xlabel("stress level")
         ax.set_ylabel("count")
         st.pyplot(fig)
     
-    with t5:
+    with t4:
       st.subheader("🥧 Gender Distribution")
 
       fig = px.pie(
@@ -654,8 +648,21 @@ elif opt=="📊Visualization":
          )
 
       st.plotly_chart(fig, use_container_width=True)
+
+      st.divider()
+
+      st.subheader("🥧 Stress Level Distribution")
+
+      fig = px.pie(
+       df,
+       names="stress_level",
+       hole=0.4,
+       color_discrete_sequence=px.colors.qualitative.Bold
+       )
+
+      st.plotly_chart(fig, use_container_width=True)
       
-    with t6:
+    with t5:
        st.subheader("🔥 Correlation Heatmap")
 
        corr = df.corr(numeric_only=True)
@@ -668,7 +675,7 @@ elif opt=="📊Visualization":
 
        st.plotly_chart(fig, use_container_width=True)
        
-
+       st.divider()
        
        st.subheader("🌞 Sunburst Chart")
 
@@ -678,132 +685,538 @@ elif opt=="📊Visualization":
          color="stress_level",
          color_continuous_scale="Turbo"
          )
+        
+       fig.update_layout(title="🌞 Gender-wise Stress Level Distribution",
+         title_x=0.5
+         )
+       st.plotly_chart(fig, use_container_width=True)
+       
+       st.divider()
+
+       st.subheader("🌳 Treemap of Gender and Stress Level")
+
+       fig = px.treemap(
+        df,
+        path=["gender", "stress_level"],
+        color="stress_level",
+        color_continuous_scale="Viridis"
+        )
 
        st.plotly_chart(fig, use_container_width=True)
+
+       st.divider()
+
+       st.subheader("🎻 Stress Level Distribution by Gender")
+
+       fig = px.violin(
+        df,
+       x="gender",
+       y="stress_level",
+       color="gender",
+       box=True,
+       points="all"
+       )
+
+       st.plotly_chart(fig, use_container_width=True)
+
+       st.divider()
+
+       st.subheader("🔵 Age vs Stress Level")
+
+       fig = px.scatter(
+        df,
+       x="age",
+       y="stress_level",
+       color="gender",
+       size="stress_level",
+       hover_data=["gender"]
+       )
+
+       st.plotly_chart(fig, use_container_width=True)
+
+       st.divider()
+
+       avg = df.groupby("age")["stress_level"].mean().reset_index()
+
+       fig = px.area(
+        avg,
+       x="age",
+       y="stress_level",
+       color_discrete_sequence=["#00CC96"]
+       )
+       fig.update_layout(
+        title="📈 Average Stress Level by Age",
+        title_x=0.5
+        )
+
+       st.plotly_chart(fig, use_container_width=True)
+       
 elif opt=="💡Insights":
     
-    set_background("black.png")   # Your background image
-    url = "https://assets3.lottiefiles.com/packages/lf20_kkflmtur.json"
+  
+    st.markdown("""
+    <h2 style="font-size:40px;color:#7DF9FF;">
+    📌 Major Findings from the Dataset
+    </h2>
+    """,unsafe_allow_html=True)
 
-    animation = requests.get(url).json()
+    st.success(f"""
 
-    st_lottie(animation, height=300)
-    st.title("📌 Key Insights")
+### 📱 Social Media Usage
 
-    st.success("✔ Teenagers spend an average of {:.2f} hours per day on social media.".format(df["daily_social_media_hours"].mean()))
+• The dataset contains information from **{len(df)} teenagers**.
 
-    st.success("✔ Average sleep hours: {:.2f}".format(df["sleep_hours"].mean()))
+• Teenagers spend an average of **{df['daily_social_media_hours'].mean():.2f} hours per day** on social media.
 
-    st.success("✔ Average physical activity: {:.2f} hours".format(df["physical_activity"].mean()))
+• Excessive daily usage indicates that social networking platforms have become an important part of teenagers' daily routine.
 
-    st.info("📱 Most used social media platform:")
+---
 
-    st.write(df["platform_usage"].value_counts())
-   
-    
+### 😴 Sleep Behaviour
 
-     
-    st.subheader("💡 Key Insights")
-    st.subheader("📱 Social Media Usage")
-    st.write("""Average daily social media usage is X hours.
-        Most teenagers spend a significant portion of their day on social media.
-        Most popular platform: Instagram/YouTube/TikTok""")
-    st.subheader("😴 Sleep Patterns")
-    st.write(""" Teenagers with higher social media usage tend to have fewer sleep hours.
-        Maintaining healthy sleep habits is important for physical and mental well-being.""")
-    st.subheader("   🏃 Physical Activity")
-    st.write("""Physical activity levels vary among teenagers.
-        Regular exercise may help support better mental health.""")
-    st.subheader(" 👥 Gender Comparison")
-    st.write(""" Compare average social media usage by gender.
-        Highlight any noticeable differences in sleep or activity levels, if present.""")
-    st.subheader("  🧠 Mental Health")
-    st.write("""Observe how social media usage relates to the mental health labels in the dataset.
-        Emphasize that the dashboard shows patterns and associations, not proof that one factor causes another.""")
-    st.subheader(" 📊 Correlation Highlights")
-    st.write(""" Mention any strong positive or negative correlations found in the heatmap.
-        Explain them in simple language.""")
-        
+• Average sleep duration is **{df['sleep_hours'].mean():.2f} hours per day**.
 
-    st.subheader("Example:")
+• Teenagers with longer screen time generally tend to sleep fewer hours.
 
-    st.write("""    A negative correlation between sleep hours and social media usage suggests that teenagers who spend more time on social media often report less sleep.
+• Healthy sleep is important for emotional stability, concentration, and academic performance.
 
-        📌 Main Findings
-        Most teenagers use social media every day.
-        Sleep duration may decrease as social media usage increases.
-        Physical activity differs across individuals.
-        Different platforms have different usage patterns.
-        The dashboard helps identify trends that may support awareness and further research.
-        💬 Recommendations
-        Limit excessive daily screen time.
-        Maintain a consistent sleep schedule.
-        Balance online activities with outdoor exercise.
-        Take regular breaks from social media.
-        Encourage open conversations about mental health.""")
+---
 
-    st.subheader("🎯 Final Conclusion")
+### 🏃 Physical Activity
 
-    st.write("""
-    -This dashboard provides an interactive analysis of teen social media usage and its relationship with lifestyle and mental health indicators. The findings suggest that balanced social media use, healthy sleep habits, and regular physical activity are important for overall well-being. These insights can help students, parents, educators, and researchers better understand behavioral trends and encourage healthier digital habits.
-    """)   
-    from streamlit_lottie import st_lottie
-    import requests
+• Average physical activity is **{df['physical_activity'].mean():.2f} hours daily**.
+
+• Teenagers who maintain regular physical activity generally demonstrate healthier lifestyle patterns.
+
+• Physical exercise can help reduce stress and improve mental well-being.
+
+""")
+    col1,col2,col3,col4=st.columns(4)
+    col1,col2,col3,col4=st.columns(4)
+
+    with col1:
+     st.markdown(f"""
+    <div class="metric-card">
+        <div class="metric-title">👥 Total Teenagers</div>
+        <div class="metric-value">{len(df)}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    with col2:
+     st.markdown(f"""
+    <div class="metric-card">
+        <div class="metric-title">📱 Avg Usage</div>
+        <div class="metric-value">{df['daily_social_media_hours'].mean():.1f} hrs</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    with col3:
+     st.markdown(f"""
+    <div class="metric-card">
+        <div class="metric-title">😴 Sleep</div>
+        <div class="metric-value">{df['sleep_hours'].mean():.1f} hrs</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    with col4:
+     st.markdown(f"""
+    <div class="metric-card">
+        <div class="metric-title">🏃 Activity</div>
+        <div class="metric-value">{df['physical_activity'].mean():.1f} hrs</div>
+    </div>
+    """, unsafe_allow_html=True)
+    st.markdown("""
+    <h2 style="font-size:40px;color:#7DF9FF;">
+    🧠 Mental Health Analysis
+    </h2>
+    """,unsafe_allow_html=True)
+
+    st.info(f"""
+
+### Average Stress Level
+**{df['stress_level'].mean():.2f}/10**
+
+Higher stress scores suggest that many teenagers experience emotional pressure related to academic life, social interactions, and digital engagement.
+
+---
+
+### Average Anxiety Level
+**{df['anxiety_level'].mean():.2f}/10**
+
+Anxiety levels indicate how frequently teenagers experience worry or nervousness in their daily lives.
+
+---
+
+### Average Addiction Level
+**{df['addiction_level'].mean():.2f}/10**
+
+The addiction score highlights the tendency of excessive social media dependence among teenagers.
+
+""")
+
+    st.markdown("""
+    <h2 style="font-size:40px;color:#7DF9FF;">
+    📊 Important Observations
+    </h2>
+    """,unsafe_allow_html=True)
+
+    st.markdown("""
+
+### 📱 1. Social Media Usage
+- Most teenagers actively use social media every day.
+- Higher screen time is one of the most common lifestyle characteristics observed.
+- Digital platforms have become a major source of communication and entertainment.
+
+---
+
+### 😴 2. Sleep Pattern
+- Increased social media usage is often associated with reduced sleep duration.
+- Maintaining 8–10 hours of sleep is important for healthy growth.
+
+---
+
+### 🧠 3. Stress & Anxiety
+- Teenagers with higher screen time generally report higher stress and anxiety scores.
+- Mental well-being appears closely related to lifestyle habits.
+
+---
+
+### 🏃 4. Physical Activity
+- Physical exercise varies considerably across teenagers.
+- More active teenagers generally demonstrate healthier daily routines.
+
+---
+
+### 📚 5. Academic Performance
+- Balanced digital habits and sufficient sleep contribute positively to academic performance.
+
+---
+
+### 🔍 6. Correlation Analysis
+- Social media usage shows positive relationships with stress and anxiety.
+- Sleep hours show negative relationships with depression and stress.
+- Correlation represents association, **not proof of causation**.
+
+""")
+
+    st.markdown("""
+    <h2 style="font-size:40px;color:#7DF9FF;">
+    🎯 Recommendations
+    </h2>
+    """,unsafe_allow_html=True)
+
+    st.success("""
+
+✅ Limit unnecessary daily screen time.
+
+✅ Maintain 8–10 hours of quality sleep.
+
+✅ Exercise regularly.
+
+✅ Take digital breaks.
+
+✅ Encourage healthy online habits.
+
+✅ Spend more time in outdoor and social activities.
+
+✅ Parents and teachers should monitor excessive smartphone usage.
+
+""")
+
+    st.markdown("""
+    <h2 style="font-size:40px;color:#7DF9FF;">
+    📌 Final Conclusion
+    </h2>
+    """,unsafe_allow_html=True)
+
+    st.info("""
+
+This dashboard provides a comprehensive analysis of how teenagers' social media usage relates to different aspects of mental health and lifestyle.
+
+The visualizations reveal meaningful patterns between screen time, sleep duration, stress, anxiety, addiction, physical activity, and academic performance.
+
+Although the dataset does not establish direct cause-and-effect relationships, it clearly highlights behavioural trends that can help students, educators, parents, healthcare professionals, and researchers better understand the influence of digital habits on adolescent well-being.
+
+The findings emphasize the importance of maintaining a healthy balance between technology usage, physical activity, proper sleep, and overall mental health.
+
+""")
+
 
     url="https://assets2.lottiefiles.com/packages/lf20_jtbfg2nb.json"
 
     animation=requests.get(url).json()
 
     st_lottie(animation,height=250)
+    
 elif opt=="📌About":
-    
-    set_background("background.png")   # Your background image
-    st.title("")
-    url = "https://assets9.lottiefiles.com/packages/lf20_3rwasyjy.json"
 
-    animation = requests.get(url).json()
-
-    st_lottie(animation, height=280)
     st.markdown("""
-    
-    <h1 style="color:white; font-size:45px;">
+    <h1 style="text-align:center;
+               color:#00E5FF;
+               font-size:52px;
+               font-weight:bold;">
     📌 About This Project
     </h1>
     """, unsafe_allow_html=True)
-    st.write("""
-### Project Objective
 
-This dashboard analyzes how social media usage affects teenagers'
-mental health.
+    st.markdown("""
 
-### Tools Used
+<div style="font-size:24px; line-height:1.9;">
 
-- Python
-- Streamlit
-- Pandas
-- Seaborn
-- Plotly
+The <b>Teen Mental Health & Social Media Usage Dashboard</b> is an interactive
+data visualization project developed to analyze how teenagers' social media
+usage relates to their mental health, lifestyle, and daily activities.
 
-### Dataset
+The dashboard transforms raw survey data into meaningful visual insights,
+allowing users to explore behavioural patterns using interactive charts,
+graphs, statistical summaries, and performance indicators.
 
-Teen Mental Health & Social Media Usage Dataset
+The project helps users understand how screen time, sleep duration,
+physical activity, anxiety, stress, addiction, and academic performance
+are interconnected.
 
-### Developed By
+</div>
 
-Amit
+""",unsafe_allow_html=True)
+
+    st.divider()
+
+    st.markdown("""
+<h2 style="font-size:40px;color:#7DF9FF;">
+🎯 Project Objectives
+</h2>
+""",unsafe_allow_html=True)
+
+    st.markdown("""
+
+<div style="font-size:24px; line-height:2;">
+
+✔ Analyze teenagers' social media usage patterns.
+
+✔ Study mental health indicators such as stress, anxiety, and addiction.
+
+✔ Explore relationships between screen time and sleep quality.
+
+✔ Compare behavioural patterns across genders.
+
+✔ Visualize the dataset using interactive charts.
+
+✔ Generate meaningful insights through statistical analysis.
+
+✔ Promote awareness of healthy digital habits.
+
+</div>
+
+""",unsafe_allow_html=True)
+
+    st.divider()
+
+    st.markdown("""
+<h2 style="font-size:40px;color:#7DF9FF;">
+📂 Dataset Information
+</h2>
+""",unsafe_allow_html=True)
+
+    st.markdown("""
+
+<div style="font-size:24px; line-height:2;">
+
+The dataset contains information related to:
+
+• Age
+
+• Gender
+
+• Daily Social Media Hours
+
+• Platform Usage
+
+• Sleep Hours
+
+• Screen Time Before Sleep
+
+• Academic Performance
+
+• Physical Activity
+
+• Social Interaction
+
+• Stress Level
+
+• Anxiety Level
+
+• Addiction Level
+
+• Depression Label
+
+</div>
+
+""",unsafe_allow_html=True)
+
+    st.divider()
+
+    st.markdown("""
+<h2 style="font-size:40px;color:#7DF9FF;">
+⚙ Technologies Used
+</h2>
+""",unsafe_allow_html=True)
+    col1,col2,col3,col4=st.columns(4)
+    col1,col2,col3,col4=st.columns(4)
+    c1,c2,c3=st.columns(3)
+    
+    with col1:
+     st.markdown(f"""
+    <div class="metric-card">
+        <div class="metric-title">Python</div>
+        <div class={len(df)}</div>
+    </div>
+    """, unsafe_allow_html=True)
+     
+     
+    with col2:
+     st.markdown(f"""
+    <div class="metric-card">
+        <div class="metric-title">Streamlit</div>
+        <div class={len(df)}</div>
+    </div>
+    """, unsafe_allow_html=True)
+     
+    with col3:
+     st.markdown(f"""
+    <div class="metric-card">
+        <div class="metric-title">Pandas</div>
+        <div class={len(df)}</div>
+    </div>
+    """, unsafe_allow_html=True)
+     
+    with col4:
+     st.markdown(f"""
+    <div class="metric-card">
+        <div class="metric-title">Seaborn</div>
+        <div class={len(df)}</div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("""
+
+<div style="font-size:24px; line-height:2;">
+
+🐍 Python
+
+📊 Pandas
+
+📈 Plotly
+
+📉 Matplotlib
+
+🎨 Seaborn
+
+🚀 Streamlit
+
+💻 VS Code
+
+</div>
+
+""",unsafe_allow_html=True)
+
+    st.divider()
+
+    st.markdown("""
+<h2 style="font-size:40px;color:#7DF9FF;">
+✨ Dashboard Features
+</h2>
+""",unsafe_allow_html=True)
+
+    st.markdown("""
+
+<div style="font-size:24px; line-height:2;">
+
+✔ Professional User Interface
+
+✔ Interactive Plotly Charts
+
+✔ Dynamic KPI Cards
+
+✔ Correlation Heatmap
+
+✔ Dataset Explorer
+
+✔ Multiple Data Visualizations
+
+✔ Statistical Summaries
+
+✔ Interactive Insights
+
+✔ User-Friendly Navigation
+
+✔ Responsive Layout
+
+</div>
+
+""",unsafe_allow_html=True)
+
+    st.divider()
+
+    st.markdown("""
+<h2 style="font-size:40px;color:#7DF9FF;">
+🎯 Target Audience
+</h2>
+""",unsafe_allow_html=True)
+
+    st.markdown("""
+
+<div style="font-size:24px; line-height:2;">
+
+• Students
+
+• Teachers
+
+• Parents
+
+• Researchers
+
+• Healthcare Professionals
+
+• Educational Institutions
+
+• Policy Makers
+
+</div>
+
+""",unsafe_allow_html=True)
+
+    st.divider()
+
+    st.markdown("""
+<h2 style="font-size:40px;color:#7DF9FF;">
+👨‍💻 Developed By
+</h2>
+""",unsafe_allow_html=True)
+
+    st.markdown("""
+
+<div style="font-size:28px; line-height:2;">
+
+<b>Amit Lagah</b>
+
+Data Science Student
+
+Python Developer
+
+Streamlit Dashboard Developer
+
+Data Visualization Enthusiast
+
+</div>
+
+""",unsafe_allow_html=True)
+
+    st.success("""
+
+### 🌍 Final Note
+
+Understanding teenagers' digital behaviour is essential for promoting healthier online habits and improving mental well-being.
+
+This dashboard transforms complex data into meaningful visual stories that support informed decision-making and encourage responsible social media usage.
+
 """)
-    """
-
-🌱 "Mental health is not a destination, but a journey."
-
-Made with ❤️ using Streamlit
-""",
-
-   
-st.markdown("---")
-
-st.markdown(
-"""
-""",
-unsafe_allow_html=True
-)
